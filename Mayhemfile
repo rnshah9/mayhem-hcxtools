@@ -1,7 +1,6 @@
 project: rnshah9/mayhem-hcxtools
-target: hcxhash2cap
+target: hcxeiutool
+image: ghcr.io/rnshah9/playground:hcxtools
 
 cmds:
-  - cmd: /hcxtools/hcxhash2cap --hccapx=/test.hccapx
-    filepath: /test.hccapx
   - cmd: /hcxtools/hcxeiutool -i @@
