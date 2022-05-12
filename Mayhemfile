@@ -4,3 +4,6 @@ target: hcxhash2cap
 cmds:
   - cmd: /hcxtools/hcxhash2cap --hccapx=/test.hccapx
     filepath: /test.hccapx
+  - cmd: /hcxtools/hcxhash2cap --hccap=/test.hccapx
+    filepath: /test.hccap
+  # - cmd: /hcxtools/hcxhash2cap --pmkid=/test.hccapx
