@@ -1,6 +1,5 @@
 project: rnshah9/mayhem-hcxtools
 target: hcxeiutool
-image: ghcr.io/rnshah9/playground:hcxtools
 
 cmds:
   - cmd: /hcxtools/hcxeiutool -i @@
