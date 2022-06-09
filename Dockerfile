@@ -8,10 +8,10 @@ WORKDIR /hcxtools
 RUN make -j8
 
 RUN mkdir -p /deps
-RUN ldd /hcxtools/hxceiutool | tr -s '[:blank:]' '\n' | grep '^/' | xargs -I % sh -c 'cp % /deps;'
+RUN ldd /hcxtools/hcxeiutool | tr -s '[:blank:]' '\n' | grep '^/' | xargs -I % sh -c 'cp % /deps;'
 
 FROM ubuntu:20.04 as package
 
 COPY --from=builder /deps /deps
-COPY --from=builder /hcxtools/hxceiutool /hcxtools/hxceiutool
+COPY --from=builder /hcxtools/hcxeiutool /hcxtools/hcxeiutool
 ENV LD_LIBRARY_PATH=/deps
