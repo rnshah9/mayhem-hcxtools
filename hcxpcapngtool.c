@@ -815,26 +815,45 @@ if(essiderrorcount > 0)			fprintf(stdout, "ESSID error (malformed packets)......
 eapolmsgerrorcount = eapolmsgerrorcount +eapolm1errorcount +eapolm2errorcount +eapolm3errorcount +eapolm4errorcount;
 if(eapolmsgerrorcount > 0)		fprintf(stdout, "EAPOL messages (malformed packets).......: %ld\n", eapolmsgerrorcount);
 
-c = 0;
-fprintf(stdout, "\nfrequency statistics from radiotap header (frequency: received packets)\n"
-		"-----------------------------------------------------------------------\n");
-for(p = 2400; p < 7000; p ++)
+if(radiotappresent == true)
 	{
-	if(usedfrequency[p] != 0)
+	c = 0;
+	fprintf(stdout, "\nfrequency statistics from radiotap header (frequency: received packets)\n"
+			"-----------------------------------------------------------------------\n");
+	for(p = 2412; p <= 7115; p ++)
 		{
-		fprintf(stdout, "% 5d: %d\t", p, usedfrequency[p]);
-		c++;
-		if((c %4) == 0) fprintf(stdout, "\n");
+		if(usedfrequency[p] != 0)
+			{
+			fprintf(stdout, "% 5d: %d\t", p, usedfrequency[p]);
+			c++;
+			if((c %4) == 0) fprintf(stdout, "\n");
+			}
 		}
+	fprintf(stdout, "\n");
 	}
-if(c == 0) fprintf(stdout, "not available due to missing radiotap header");
-fprintf(stdout, "\n");
-
 if((eapolwrittencount +eapolncwrittencount +eapolwrittenhcpxcountdeprecated +eapolncwrittenhcpxcountdeprecated +eapolwrittenhcpcountdeprecated
 	+eapolwrittenjcountdeprecated +pmkidwrittenhcount +pmkidwrittenjcountdeprecated +pmkidwrittencountdeprecated
 	+eapmd5writtencount +eapmd5johnwrittencount +eapleapwrittencount +eapmschapv2writtencount +tacacspwrittencount) == 0)
 	{
 	printf( "\nInformation: no hashes written to hash files\n");
+	}
+if(ancientdumpfileformat == true)
+	{
+	fprintf(stdout, "\nInformation: limited dump file format detected!\n"
+		"This file format is a very basic format to save captured network data.\n"
+		"It is recommended to use PCAP Next Generation dump file format (or pcapng for short) instead.\n"
+		"The PCAP Next Generation dump file format is an attempt to overcome the limitations\n"
+		"of the currently widely used (but limited) libpcap (cap, pcap) format.\n"
+		"https://www.wireshark.org/docs/wsug_html_chunked/AppFiles.html#ChAppFilesCaptureFilesSection\n"
+		"https://github.com/pcapng/pcapng\n");
+	}
+if(radiotappresent == false)
+	{
+	fprintf(stdout, "\nInformation: radiotap header is missing!\n"
+		"Radiotap is a de facto standard for 802.11 frame injection and reception.\n"
+		"The radiotap header format is a mechanism to supply additional information about frames,\n"
+		"from the driver to userspace applications.\n"
+		"https://www.radiotap.org/\n");
 	}
 if(sequenceerrorcount > 0)
 	{
@@ -871,24 +890,6 @@ if((deauthenticationcount +disassociationcount) > 10000)
 		"renew ANONCE and set PMKID to zero.\n"
 		"This could prevent to calculate a valid EAPOL MESSAGE PAIR\n"
 		"or to get a valid PMKID.\n");
-	}
-if(ancientdumpfileformat == true)
-	{
-	fprintf(stdout, "\nInformation: limited dump file format detected!\n"
-		"This file format is a very basic format to save captured network data.\n"
-		"It is recommended to use PCAP Next Generation dump file format (or pcapng for short) instead.\n"
-		"The PCAP Next Generation dump file format is an attempt to overcome the limitations\n"
-		"of the currently widely used (but limited) libpcap (cap, pcap) format.\n"
-		"https://www.wireshark.org/docs/wsug_html_chunked/AppFiles.html#ChAppFilesCaptureFilesSection\n"
-		"https://github.com/pcapng/pcapng\n");
-	}
-if(radiotappresent == false)
-	{
-	fprintf(stdout, "\nInformation: radiotap header is missing!\n"
-		"Radiotap is a de facto standard for 802.11 frame injection and reception.\n"
-		"The radiotap header format is a mechanism to supply additional information about frames,\n"
-		"from the driver to userspace applications.\n"
-		"https://www.radiotap.org/\n");
 	}
 if(((beaconcount + proberesponsecount) == 0) && ((associationrequestcount + reassociationrequestcount) == 0))
 	{
@@ -1025,6 +1026,7 @@ for(zeigermac = aplist; zeigermac < aplistptr; zeigermac++)
 		fprintf(fh_deviceinfo, "\t");
 		for(p = 0; p < zeigermac->enrolleelen; p++) fprintf(fh_deviceinfo, "%02x", zeigermac->enrollee[p]);
 		}
+	fwritedeviceinfostr(zeigermac->essidlen, zeigermac->essid, fh_deviceinfo);
 	fprintf(fh_deviceinfo, "\n");
 	deviceinfocount++;
 	}
@@ -3188,8 +3190,10 @@ return true;
 static bool gettags(int infolen, uint8_t *infoptr, tags_t *zeiger)
 {
 static ietag_t *tagptr;
+static bool ef;
 
 memset(zeiger, 0, TAGS_SIZE);
+ef = false;
 while(0 < infolen)
 	{
 	if(infolen == 4) return true;
@@ -3210,6 +3214,7 @@ while(0 < infolen)
 			}
 		if(isessidvalid(tagptr->len, &tagptr->data[0]) == false) return false;
 			{
+			ef = true;
 			memcpy(zeiger->essid, &tagptr->data[0], tagptr->len);
 			zeiger->essidlen = tagptr->len;
 			}
@@ -3243,7 +3248,7 @@ while(0 < infolen)
 	infoptr += tagptr->len +IETAG_SIZE;
 	infolen -= tagptr->len +IETAG_SIZE;
 	}
-if((infolen != 0) && (infolen != 4)) return false;
+if((infolen != 0) && (infolen != 4) && (ef == false)) return false;
 return true;
 }
 /*===========================================================================*/
@@ -4320,7 +4325,6 @@ if(memcmp(&tags.essid, &zeroed32, tags.essidlen) == 0)
 	beaconssidzeroedcount++;
 	return;
 	}
-
 if((tags.channel > 0) && (tags.channel <= 14))
 	{
 	beaconchannel[0] |= GHZ24;
@@ -4556,7 +4560,7 @@ static uint32_t *pp;
 frequency = 0;
 rth = (rth_t*)capptr;
 pf = RTH_SIZE;
-if((rth->it_present & IEEE80211_RADIOTAP_DBM_ANTSIGNAL) != IEEE80211_RADIOTAP_DBM_ANTSIGNAL) return;
+if((rth->it_present & IEEE80211_RADIOTAP_CHANNEL) != IEEE80211_RADIOTAP_CHANNEL) return;
 if((rth->it_present & IEEE80211_RADIOTAP_EXT) == IEEE80211_RADIOTAP_EXT)
 	{
 	pp = (uint32_t*)capptr;
@@ -4578,22 +4582,22 @@ if((rth->it_present & IEEE80211_RADIOTAP_CHANNEL) == IEEE80211_RADIOTAP_CHANNEL)
 	if((pf %2) != 0) pf += 1;
 	frequency = (capptr[pf +1] << 8) + capptr[pf];
 	usedfrequency[frequency] += 1;
-	if((frequency >= 2407) && (frequency <= 2474))
+	if((frequency >= 2412) && (frequency <= 2472))
 		{
 		interfacechannel = (frequency -2407)/5;
 		band24count++;
 		}
-	else if((frequency >= 2481) && (frequency <= 2487))
+	else if((frequency == 2484) && (frequency <= 2487))
 		{
 		interfacechannel = (frequency -2412)/5;
 		band24count++;
 		}
-	else if((frequency >= 5005) && (frequency <= 5980))
+	else if((frequency >=  5180) && (frequency <= 5905))
 		{
 		interfacechannel = (frequency -5000)/5;
 		band5count++;
 		}
-	else if((frequency >= 5955) && (frequency <= 6415))
+	else if((frequency >= 5955) && (frequency <= 7115))
 		{
 		interfacechannel = (frequency -5950)/5;
 		band6count++;
@@ -5779,7 +5783,7 @@ fprintf(stdout, "%s %s (C) %s ZeroBeat\n"
 	"-I <file> : output unsorted identity list to use as input wordlist for cracker\n"
 	"-U <file> : output unsorted username list to use as input wordlist for cracker\n"
 	"-D <file> : output device information list\n"
-	"            format MAC MANUFACTURER MODELNAME SERIALNUMBER DEVICENAME UUID\n"
+	"            format MAC MANUFACTURER MODELNAME SERIALNUMBER DEVICENAME UUID ESSID\n"
 	"-h        : show this help\n"
 	"-v        : show version\n"
 	"\n"

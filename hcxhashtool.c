@@ -58,7 +58,8 @@ static long int eapolwrittencount;
 static long int essidwrittencount;
 static long int hccapxwrittencount;
 static long int hccapwrittencount;
-static long int johnwrittencount;
+static long int johnpmkidwrittencount;
+static long int johneapolwrittencount;
 
 static int hashtype;
 static int essidlen;
@@ -127,6 +128,8 @@ eapolcount = 0;
 pmkidwrittencount = 0;
 eapolwrittencount = 0;
 essidwrittencount = 0;
+johnpmkidwrittencount = 0;
+johneapolwrittencount = 0;
 hccapxwrittencount = 0;
 hccapwrittencount = 0;
 ERR_load_crypto_strings();
@@ -202,9 +205,10 @@ if(flagfilterauthorized == true)	fprintf(stdout, "filter by status..............
 if(flagfilterchallenge == true)	fprintf(stdout, "filter by status..............: challenge (M1M2)\n");
 if(pmkidwrittencount > 0)		fprintf(stdout, "PMKID written.................: %ld\n", pmkidwrittencount);
 if(eapolwrittencount > 0)		fprintf(stdout, "EAPOL written.................: %ld\n", eapolwrittencount);
+if(johnpmkidwrittencount > 0)		fprintf(stdout, "PMKID written to john.........: %ld\n", johnpmkidwrittencount);
+if(johneapolwrittencount > 0)		fprintf(stdout, "EAPOL written to john.........: %ld\n", johneapolwrittencount);
 if(hccapxwrittencount > 0)		fprintf(stdout, "EAPOL written to hccapx.......: %ld\n", hccapxwrittencount);
 if(hccapwrittencount > 0)		fprintf(stdout, "EAPOL written to hccap........: %ld\n", hccapwrittencount);
-if(johnwrittencount > 0)		fprintf(stdout, "EAPOL written to john.........: %ld\n", johnwrittencount);
 if(essidwrittencount > 0)		fprintf(stdout, "ESSID (unique) written........: %ld\n", essidwrittencount);
 fprintf(stdout, "\n");
 return;
@@ -775,7 +779,6 @@ static int i;
 static unsigned char *hcpos;
 static hccap_t hccap;
 
-if(zeiger->type == HCX_TYPE_PMKID) return;
 if((zeiger->essidlen < essidlenmin) || (zeiger->essidlen > essidlenmax)) return;
 if(((zeiger->type &hashtype) != HCX_TYPE_PMKID) && ((zeiger->type &hashtype) != HCX_TYPE_EAPOL)) return;
 if(flagfiltermacap == true) if(memcmp(&filtermacap, zeiger->ap, 6) != 0) return;
@@ -801,6 +804,18 @@ if((flagfilterrcnotchecked == true) && ((zeiger->mp &0x80) != 0x80)) return;
 if((flagfilterauthorized == true) && ((zeiger->mp &0x07) == 0x00)) return;
 if((flagfilterchallenge == true) && ((zeiger->mp &0x07) != 0x01)) return;
 
+if(zeiger->type == HCX_TYPE_PMKID)
+	{
+	fprintf(fh_john, "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x*%02x%02x%02x%02x%02x%02x*%02x%02x%02x%02x%02x%02x*",
+		zeiger->hash[0], zeiger->hash[1], zeiger->hash[2], zeiger->hash[3], zeiger->hash[4], zeiger->hash[5], zeiger->hash[6], zeiger->hash[7],
+		zeiger->hash[8], zeiger->hash[9], zeiger->hash[10], zeiger->hash[11], zeiger->hash[12], zeiger->hash[13], zeiger->hash[14], zeiger->hash[15],
+		zeiger->ap[0], zeiger->ap[1], zeiger->ap[2], zeiger->ap[3], zeiger->ap[4], zeiger->ap[5],
+		zeiger->client[0], zeiger->client[1], zeiger->client[2], zeiger->client[3], zeiger->client[4], zeiger->client[5]);
+	for(i = 0; i < zeiger->essidlen; i++) fprintf(fh_john, "%02x", zeiger->essid[i]);
+	fprintf(fh_john, "\n");
+	johnpmkidwrittencount++;
+	return;
+	}
 wpak = (wpakey_t*)(zeiger->eapol +EAPAUTH_SIZE);
 memset(&hccap, 0, sizeof(hccap_t));
 memcpy(&hccap.essid, zeiger->essid, zeiger->essidlen);
@@ -829,7 +844,7 @@ else fprintf(fh_john, "::WPA2");
 if((zeiger->mp &0x7) == 0) fprintf(fh_john, ":not verified");
 else fprintf(fh_john, ":verified");
 fprintf(fh_john, ":converted by hcxhastool\n");
-johnwrittencount++;
+johneapolwrittencount++;
 return;
 }
 /*===========================================================================*/

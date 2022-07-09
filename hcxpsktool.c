@@ -33,7 +33,7 @@ static unsigned int thisyear;
 
 static bool airtelflag;
 static bool alticeoptimumflag;
-static bool spectrumflag;
+static bool asusflag;
 static bool digit10flag;
 static bool easyboxflag;
 static bool eeflag;
@@ -45,6 +45,7 @@ static bool netgearflag;
 static bool noessidcombinationflag;
 static bool phomeflag;
 static bool podaflag;
+static bool spectrumflag;
 static bool tendaflag;
 static bool ukrtelecomflag;
 static bool usdateflag;
@@ -299,43 +300,44 @@ static const char *firstword[] =
 "alter", "anchor", "ancient", "angry", "apart", "aquatic", "author", "away",
 "bakery", "barrel", "basic", "basket", "bench", "better", "black", "blue",
 "bold", "born", "botany", "brave", "breezy", "brew", "bridge", "brief",
-"bright", "broad", "brown", "calm", "camera", "chance", "check", "chilly",
-"choice", "chorus", "chummy", "classy", "clean", "clerk", "clever", "close",
-"cloudy", "clumsy", "coffee", "cold", "common", "content", "cool", "cosmic",
-"crispy", "curly", "daily", "damp", "decent", "deep", "degree", "desert",
-"direct", "dizzy", "domain", "due", "dusty", "duty", "dynamic", "each",
-"eager", "eagle", "easy", "elated", "elegant", "empty", "energy", "engine",
-"entire", "epic", "errand", "even", "exact", "excited", "exotic", "fair",
-"famous", "fancy", "farmer", "fast", "fearless", "festive", "few", "finish",
-"first", "fit", "fluent", "fluffy", "formal", "free", "fresh", "friend",
-"front", "funny", "furry", "future", "fuzzy", "gallon", "genius", "gentle",
-"giddy", "gifted", "global", "gold", "goofy", "grain", "grand", "great",
-"green", "grumpy", "guitar", "happy", "harbor", "hearty", "heavy", "height",
-"helpful", "high", "hockey", "honest", "honor", "hotel", "hungry", "husky",
-"icy", "idea", "immune", "input", "invent", "island", "jacket", "jagged",
-"jazz", "jeans", "jewel", "jolly", "joyous", "judge", "kettle", "key",
-"kind", "kite", "knight", "known", "ladder", "large", "latter", "lazy",
-"leader", "left", "legal", "less", "light", "like", "little", "lively",
-"long", "lost", "lotus", "loud", "loyal", "lucky", "magical", "major",
-"manic", "many", "marble", "market", "master", "mellow", "melodic", "middle",
-"mighty", "minute", "mirror", "misty", "mobile", "modern", "month", "much",
-"museum", "narrow", "nature", "nearby", "neat", "nest", "new", "nifty",
-"nine", "noble", "noisy", "normal", "north", "oasis", "object", "ocean",
-"odd", "olive", "open", "orange", "oxygen", "palm", "parade", "past",
-"pastel", "patron", "perfect", "phobic", "phone", "pink", "plain", "plane",
-"pledge", "pocket", "polite", "praise", "precious", "prior", "prize", "proper",
-"prose", "proud", "purple", "quaint", "quick", "quiet", "quote", "rain",
-"rainy", "rapid", "rare", "ready", "reason", "red", "remedy", "review",
-"reward", "rich", "rocket", "rocky", "round", "royal", "runner", "rustic",
-"safety", "salt", "salute", "scary", "scout", "select", "shelf", "shiny",
-"short", "silent", "silky", "silly", "silver", "sleepy", "slow", "small",
-"smart", "smiley", "smiling", "smooth", "soccer", "some", "space", "spare",
-"square", "stable", "statue", "stealth", "stock", "street", "strict", "strong",
-"studio", "such", "sudden", "summit", "sunny", "super", "sweet", "swift",
-"tablet", "tall", "teal", "terrific", "theory", "thick", "thirsty", "this",
-"tight", "timber", "tiny", "town", "turtle", "uneven", "union", "unique",
-"unite", "unusual", "upset", "urban", "useful", "usual", "valley", "vanilla",
-"vast", "verse", "violet", "violin", "voyage", "wagon", "walnut", "warm",
+"bright", "broad", "brown", "calm", "camera", "chance", "check", "cheerful",
+"chilly", "choice", "chorus", "chummy", "classy", "clean", "clerk", "clever",
+"close", "cloudy", "clumsy", "coffee", "cold", "common", "content", "cool",
+"cosmic", "crispy", "curly", "daily", "damp", "decent", "deep", "degree",
+"desert", "dig", "direct", "dizzy", "domain", "due", "dusty", "duty",
+"dynamic", "each", "eager", "eagle", "easy", "elated", "elegant", "empty",
+"energy", "engine", "entire", "epic", "errand", "even", "exact", "excited",
+"exotic", "fair", "famous", "fancy", "farmer", "fast", "fearless", "festive",
+"few", "finish", "first", "fit", "fluent", "fluffy", "formal", "free",
+"fresh", "friend", "front", "funny", "furry", "future", "fuzzy", "gallon",
+"genius", "gent|e", "gentle", "giddy", "gifted", "global", "gold", "goofy",
+"grain", "grand", "great", "green", "grumpy", "guitar", "happy", "harbor",
+"hearty", "heavy", "height", "helpful", "high", "hockey", "honest", "honor",
+"hotel", "hungry", "husky", "icy", "idea", "imaginary", "immune", "input",
+"invent", "island", "jacket", "jagged", "jazz", "jeans", "jewel", "jolly",
+"joyous", "judge", "juicy", "kettle", "key", "kind", "kite", "knight",
+"known", "ladder", "large", "latter", "lazy", "leader", "left", "legal",
+"less", "light", "like", "little", "lively", "long", "lost", "lotus",
+"loud", "loyal", "lucky", "magical", "major", "manic", "many", "marble",
+"market", "master", "mellow", "melodic", "middle", "mighty", "minute", "mirror",
+"misty", "mobile", "modern", "month", "much", "museum", "narrow", "nature",
+"nearby", "neat", "nest", "new", "nifty", "nine", "noble", "noisy",
+"normal", "north", "oasis", "object", "ocean", "odd", "olive", "open",
+"orange", "oxygen", "palm", "parade", "past", "pastel", "patron", "perfect",
+"phobic", "phone", "pink", "plain", "plane", "pledge", "pocket", "polite",
+"praise", "precious", "prior", "prize", "proper", "prose", "proud", "purple",
+"quaint", "quick", "quiet", "quote", "rain", "rainy", "rapid", "rare",
+"ready", "reason", "red", "remedy", "review", "reward", "ric", "rich",
+"rocket", "rocky", "round", "royal", "runner", "rustic", "safety", "salt",
+"salute", "scary", "scout", "select", "shelf", "shiny", "short", "silent",
+"silky", "silly", "silver", "sleepy", "slow", "small", "smart", "smiley",
+"smiling", "smooth", "soccer", "some", "space", "spare", "square", "stable",
+"statue", "stealt", "stealth", "stock", "street", "strict", "strong", "studio",
+"such", "sudden", "summit", "sunny", "super", "sweet", "swift", "tablet",
+"tall", "teal", "terrific", "theory", "thick", "thirsty", "this", "tight",
+"timber", "tiny", "town", "turtle", "uneven", "union", "unique", "unite",
+"unusual", "upset", "urban", "useful", "usual", "valley", "vanilla", "vast",
+"verse", "violet", "violin", "voyage", "wagon", "walnut", "warm", "warmw",
 "watch", "watery", "weekly", "west", "wide", "windy", "wine", "witty",
 "wonderful", "wooden", "writer", "yacht", "yard", "year", "yellow", "young",
 "zany", "zeal", "zebra", "zone"
@@ -345,42 +347,44 @@ static const char *secondword[] =
 {
 "acre", "actor", "ad", "advice", "agency", "air", "airplane", "album",
 "anchor", "apple", "area", "aspect", "author", "ave", "bakery", "ball",
-"balloon", "banana", "barrel", "basket", "beach", "bead", "bear", "bench",
-"berry", "bike", "bird", "board", "boat", "bolt", "bonus", "book",
-"boot", "botany", "box", "brain", "bread", "breeze", "bridge", "bubble",
-"bug", "bunny", "bus", "butter", "camera", "canoe", "car", "carrot",
-"cartoon", "cello", "chair", "check", "cheek", "cheese", "chorus", "city",
-"clerk", "clock", "coat", "coconut", "coffee", "comet", "cookie", "cosmic",
-"country", "county", "cow", "cream", "crown", "curtain", "daisy", "data",
-"dealer", "deer", "degree", "desert", "desk", "diamond", "dinner", "dirt",
-"dog", "doll", "domain", "drama", "duty", "eagle", "ear", "earth",
-"editor", "effort", "energy", "engine", "epic", "errand", "error", "estate",
-"extent", "famous", "farmer", "field", "finch", "finish", "fire", "fish",
-"flower", "fluent", "flute", "form", "formal", "fox", "friend", "gadfly",
-"gallon", "garden", "gate", "genius", "giant", "global", "grain", "guitar",
-"guppy", "hair", "hall", "hand", "harbor", "hat", "height", "hill",
-"hippo", "hockey", "home", "honor", "horse", "hotel", "house", "idea",
-"idol", "immune", "income", "ink", "input", "invent", "iris", "island",
-"jacket", "jade", "jazz", "jeans", "jet", "jewel", "judge", "jungle",
-"kayak", "kettle", "key", "kite", "knight", "ladder", "lake", "law",
-"lawn", "leader", "lemon", "length", "light", "lion", "lotus", "loyal",
-"major", "mango", "marble", "market", "math", "menu", "mesa", "method",
-"mint", "mirror", "mobile", "month", "moon", "mud", "museum", "music",
-"nation", "nature", "nest", "noble", "north", "oasis", "object", "oboe",
-"ocean", "octopus", "onion", "orange", "outlet", "owl", "owner", "oxygen",
-"palm", "panda", "pant", "paper", "parade", "park", "patron", "peach",
-"pear", "pencil", "people", "phoenix", "phone", "piano", "pizza", "place",
-"planet", "player", "pledge", "plum", "pocket", "poem", "poet", "poetry",
-"pond", "poodle", "potato", "prairie", "praise", "prose", "puppy", "quail",
-"quaint", "quick", "quote", "rabbit", "raccoon", "raft", "rain", "raven",
-"reason", "remedy", "review", "reward", "river", "road", "robin", "rock",
-"rocket", "role", "rose", "rosebud", "runner", "safety", "salute", "scout",
-"sea", "seed", "series", "shark", "sheep", "shelf", "ship", "shoe",
-"shrub", "singer", "skates", "sky", "sled", "snail", "snake", "soccer",
-"socks", "sofa", "space", "spark", "sparrow", "spider", "spoon", "squash",
-"squirrel", "stable", "star", "state", "statue", "storm", "stove", "straw",
-"street", "studio", "study", "summit", "sun", "table", "tablet", "tea",
-"teapot", "teen", "tent", "theory", "tiger", "timber", "tomato", "tooth",
+"balloon", "banana", "barrel", "basis", "basket", "beach", "bead", "bear",
+"bench", "berry", "bike", "bird", "board", "boat", "bolt", "bonus",
+"book", "boot", "botany", "box", "brain", "bread", "breeze", "bridge",
+"bubble", "bug", "bunny", "bus", "butter", "camera", "canoe", "car",
+"carrot", "cartoon", "cello", "chair", "check", "cheek", "cheese", "chorus",
+"city", "clerk", "clock", "coat", "coconut", "coffee", "comet", "cookie",
+"cosmic", "country", "county", "cow", "cream", "crown", "curtain", "daisy",
+"data", "dealer", "deeper", "deer", "degree", "desert", "desk", "diamond",
+"dinner", "dirt", "dog", "doll", "domain", "drama", "drawer", "duty",
+"eagle", "ear", "earth", "editor", "effort", "energy", "engine", "epic",
+"errand", "error", "estate", "extent", "famous", "farmer", "field", "finch",
+"finish", "fire", "fish", "flo", "flower", "fluent", "flute", "form",
+"formal", "fox", "friend", "gadfly", "gallon", "garden", "gate", "genius",
+"giant", "global", "grain", "green", "guitar", "guppy", "hair", "hairplane",
+"hale", "hall", "hand", "harbor", "hat", "height", "hill", "hippo",
+"hockey", "home", "honor", "horse", "hotel", "house", "howl", "hrose",
+"idea", "idol", "immune", "income", "ink", "input", "invent", "iris",
+"island", "jacket", "jade", "jazz", "jeans", "jet", "jewel", "judge",
+"jungle", "kayak", "kettle", "key", "kite", "knight", "ladder", "lake",
+"law", "lawn", "leader", "lemon", "length", "light", "lion", "lotus",
+"loyal", "major", "mango", "map", "marble", "market", "math", "menu",
+"mesa", "method", "mint", "mirror", "mobile", "month", "moon", "mud",
+"museum", "music", "nation", "nature", "nest", "noble", "north", "oasis",
+"object", "oboe", "ocean", "octopus", "office", "onion", "orange", "outlet",
+"owl", "own", "owner", "oxygen", "palm", "panda", "pant", "paper",
+"parade", "park", "patron", "peach", "pear", "pencil", "people", "phoenix",
+"phone", "piano", "pizza", "place", "planet", "player", "pledge", "plum",
+"pocket", "poem", "poet", "poetry", "pond", "poodle", "potato", "prairie",
+"praise", "prose", "puppy", "quail", "quaint", "quick", "quote", "rabbit",
+"raccoon", "raft", "rain", "ratio", "raven", "reason", "remedy", "review",
+"reward", "river", "road", "robin", "rock", "rocket", "role", "rose",
+"rosebud", "runner", "safety", "salute", "scout", "sea", "sector", "seed",
+"series", "shark", "sheep", "shelf", "ship", "shoe", "shrub", "singer",
+"skates", "sky", "sled", "snail", "snake", "snall", "soccer", "socks",
+"sofa", "space", "spark", "sparrow", "spider", "spoon", "squash", "squirrel",
+"stable", "star", "state", "statue", "storm", "stove", "straw", "street",
+"studio", "study", "summit", "sun", "table", "tablet", "tea", "teapot",
+"teapoty", "teen", "tent", "theory", "tiger", "timber", "tomato", "tooth",
 "topic", "town", "trail", "train", "tree", "truck", "trumpet", "truth",
 "tuba", "tulip", "turkey", "turtle", "two", "unicorn", "union", "unit",
 "unite", "urban", "useful", "valley", "value", "vase", "verse", "video",
@@ -855,6 +859,40 @@ for (w = 0; w < (sizeof(word) / sizeof(char *)); w++ )
 					}
 				}
 		*/
+		}
+	}
+
+return;
+}
+/*===========================================================================*/
+static void keywriteasus(FILE *fhout)
+{
+static unsigned int w, i;
+
+static const char *word[] =
+{
+"account", "actor", "amazing", "autumn",
+"bakery", "browser",
+"center", "cocoa", "cupid",
+"delta", "donkey",
+"enjoy", "export", "extra", "eyebrow",
+"february",
+"grape",
+"haircut", "hiking", "hometown", "honor",
+"jaguar",
+"keeper", "kiss", "knuckle",
+"literacy",
+"mars", "momentum", "morning", "museum",
+"popcorn", "puma", "puppet",
+"relax",
+"saturday", "science", "science", "soccer", "star"
+};
+
+for (w = 0; w < (sizeof(word) / sizeof(char *)); w++ )
+	{
+	for (i = 0; i < 10000; i++)
+		{
+		fprintf(fhout, "%s_%04d\n", word[w], i);
 		}
 	}
 
@@ -2094,7 +2132,6 @@ static int pi, po;
 static char essidtmp[PSKSTRING_LEN_MAX] = {};
 
 if((essidlen == 0) || (essidlen > 32)) return;
-testx2g(fhout, essidlen, essid);
 testairtel(fhout, essidlen, essid);
 testalcatellinkzone(fhout, essidlen, essid);
 testarrisizzi(fhout, essidlen, essid);
@@ -2119,6 +2156,7 @@ testtelered(fhout, essidlen, essid);
 testukrtelecom(fhout, essidlen, essid);
 testwifirsu(fhout, essidlen, essid);
 testwlan(fhout, essidlen, essid);
+testx2g(fhout, essidlen, essid);
 testzhone(fhout, essidlen, essid);
 
 if(noessidcombinationflag == true) return;
@@ -2342,10 +2380,24 @@ fprintf(fhout, "%012llX\n", macaddr &0xffffffffff);
 
 nici = ~macaddr &0xffffff;
 fprintf(fhout, "wlan%06x\n", nici);
+
 nici = ~macaddr &0xffffffff;
 fprintf(fhout, "%08x\n", nici);
+
 nici = (~macaddr >> 8) &0xffffffff;
 fprintf(fhout, "%08x\n", nici);
+
+for (c = 0x01; c < 0x10; c ++)
+	{
+	nici = ~(macaddr -c) &0xffffff;
+	fprintf(fhout, "wlan%06x\n", nici);
+
+	nici = ~(macaddr -c) &0xffffffff;
+	fprintf(fhout, "%08x\n", nici);
+
+	nici = ((~macaddr -c) >> 8) &0xffffffff;
+	fprintf(fhout, "%08x\n", nici);
+	}
 
 me = macaddr &0xffffff;
 fprintf(fhout, "05%6d\n", me);
@@ -2385,23 +2437,24 @@ return;
 /*===========================================================================*/
 static void processadditionals(FILE *fhout)
 {
-if(netgearflag == true) keywritenetgear(fhout);
-if(spectrumflag == true) keywritespectrum(fhout);
+if((eudateflag == true) || (usdateflag == true)) keywriteyearyear(fhout);
+if(alticeoptimumflag == true) keywritealticeoptimum(fhout);
+if(asusflag == true) keywriteasus(fhout);
 if(digit10flag == true) keywritedigit10(fhout);
+if(eeflag == true) keywriteee(fhout);
+if(egnflag == true) keywriteegn(fhout);
+if(eudateflag == true) keywriteeudate(fhout);
+if(netgearflag == true) keywritenetgear(fhout);
 if(phomeflag == true) keywritephome(fhout);
+if(spectrumflag == true) keywritespectrum(fhout);
 if(tendaflag == true)
 	{
 	keywritetenda1(fhout);
 	keywritetenda2(fhout);
 	}
-if(eeflag == true) keywriteee(fhout);
-if(alticeoptimumflag == true) keywritealticeoptimum(fhout);
-if(weakpassflag == true) keywriteweakpass(fhout);
-if(eudateflag == true) keywriteeudate(fhout);
 if(usdateflag == true) keywriteusdate(fhout);
-if((eudateflag == true) || (usdateflag == true)) keywriteyearyear(fhout);
+if(weakpassflag == true) keywriteweakpass(fhout);
 if(wpskeysflag == true) writewpsall(fhout);
-if(egnflag == true) keywriteegn(fhout);
 return;
 }
 /*===========================================================================*/
@@ -2800,6 +2853,7 @@ fprintf(stdout, "%s %s (C) %s ZeroBeat\n"
 	"--ee                : include weak EE BrightBox candidates\n"
 	"                      list will be > 3GB\n"
 	"--alticeoptimum     : include weak Altice/Optimum candidates (MyAltice)\n"
+	"--asus              : include weak ASUS RT-AC58U candidates (ASUS_XX)\n"
 	"--weakpass          : include weak password candidates\n"
 	"--eudate            : include complete european dates\n"
 	"--usdate            : include complete american dates\n"
@@ -2837,7 +2891,7 @@ static char *pskname = NULL;
 
 airtelflag = false;
 alticeoptimumflag = false;
-spectrumflag = false;
+asusflag = false;
 digit10flag = false;
 easyboxflag = false;
 eeflag = false;
@@ -2845,10 +2899,11 @@ egnflag = false;
 eudateflag = false;
 hb5flag = false;
 maconlyflag = false;
-noessidcombinationflag = false;
 netgearflag = false;
+noessidcombinationflag = false;
 phomeflag = false;
 podaflag = false;
+spectrumflag = false;
 tendaflag = false;
 ukrtelecomflag = false;
 usdateflag = false;
@@ -2859,20 +2914,21 @@ znidflag = false;
 static const char *short_options = "c:i:j:z:o:e:b:o:hv";
 static const struct option long_options[] =
 {
-	{"maconly",			no_argument,		NULL,	HCXD_MACONLY},
-	{"noessidcombination",		no_argument,		NULL,	HCXD_NOESSIDCOMBINATION},
-	{"netgear",			no_argument,		NULL,	HCXD_NETGEAR},
-	{"spectrum",			no_argument,		NULL,	HCXD_SPECTRUM},
-	{"digit10",			no_argument,		NULL,	HCXD_DIGIT10},
-	{"phome",			no_argument,		NULL,	HCXD_PHOME},
-	{"tenda",			no_argument,		NULL,	HCXD_TENDA},
-	{"ee",				no_argument,		NULL,	HCXD_EE},
 	{"alticeoptimum",				no_argument,		NULL,	HCXD_ALTICEOPTIMUM},
-	{"weakpass",			no_argument,		NULL,	HCXD_WEAKPASS},
-	{"eudate",			no_argument,		NULL,	HCXD_EUDATE},
-	{"usdate",			no_argument,		NULL,	HCXD_USDATE},
-	{"wpskeys",			no_argument,		NULL,	HCXD_WPSKEYS},
+	{"asus",				no_argument,		NULL,	HCXD_ASUS},
+	{"digit10",			no_argument,		NULL,	HCXD_DIGIT10},
+	{"ee",				no_argument,		NULL,	HCXD_EE},
 	{"egn",				no_argument,		NULL,	HCXD_EGN},
+	{"eudate",			no_argument,		NULL,	HCXD_EUDATE},
+	{"maconly",			no_argument,		NULL,	HCXD_MACONLY},
+	{"netgear",			no_argument,		NULL,	HCXD_NETGEAR},
+	{"noessidcombination",		no_argument,		NULL,	HCXD_NOESSIDCOMBINATION},
+	{"phome",			no_argument,		NULL,	HCXD_PHOME},
+	{"spectrum",			no_argument,		NULL,	HCXD_SPECTRUM},
+	{"tenda",			no_argument,		NULL,	HCXD_TENDA},
+	{"usdate",			no_argument,		NULL,	HCXD_USDATE},
+	{"weakpass",			no_argument,		NULL,	HCXD_WEAKPASS},
+	{"wpskeys",			no_argument,		NULL,	HCXD_WPSKEYS},
 	{"version",			no_argument,		NULL,	HCXD_VERSION},
 	{"help",			no_argument,		NULL,	HCXD_HELP},
 	{NULL,				0,			NULL,	0}
@@ -2920,6 +2976,10 @@ while((auswahl = getopt_long (argc, argv, short_options, long_options, &index)) 
 
 		case HCXD_ALTICEOPTIMUM:
 		alticeoptimumflag = true;
+		break;
+
+		case HCXD_ASUS:
+		asusflag = true;
 		break;
 
 		case HCXD_WEAKPASS:
