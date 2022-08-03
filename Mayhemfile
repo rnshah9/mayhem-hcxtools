@@ -2,4 +2,4 @@ project: hcxtools
 target: hcxeiutool
 
 cmds:
-  - cmd: /hcxtools/hcxeiutool -i @@
+  - cmd: /install/usr/bin/hcxeiutool -i @@
