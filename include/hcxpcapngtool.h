@@ -17,6 +17,7 @@
 #define HCX_HCCAP_OUT_DEPRECATED		17
 #define HCX_PMKIDEAPOLJTR_OUT_DEPRECATED	18
 #define HCX_PREFIX_OUT				19
+#define HCX_ADD_TIMESTAMP			20
 #define HCX_PMKIDEAPOL_OUT			'o'
 #define HCX_ESSID_OUT				'E'
 #define HCX_ESSIDPROBEREQUEST_OUT		'R'
@@ -278,6 +279,7 @@ return 0;
 struct handshakelist_s
 {
  uint64_t		timestampgap;
+ uint64_t		timestamp;
  uint8_t		status;
  uint8_t		messageap;
  uint8_t		messageclient;
